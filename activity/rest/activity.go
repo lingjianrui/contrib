@@ -111,6 +111,7 @@ func (a *Activity) Metadata() *activity.Metadata {
 
 // Eval implements api.Activity.Eval - Invokes a REST Operation
 func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
+	logger.Debug("小黑修改过")
 
 	input := &Input{}
 	err = ctx.GetInputObject(input)
@@ -253,8 +254,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		logger.Trace("Response body:", result)
 	}
 
-
-	output := &Output{Status: resp.StatusCode, Data: result, Headers:respHeaders, Cookies:cookies}
+	output := &Output{Status: resp.StatusCode, Data: result, Headers: respHeaders, Cookies: cookies}
 	err = ctx.SetOutputObject(output)
 	if err != nil {
 		return false, err
@@ -287,8 +287,7 @@ func (a *Activity) getHeaders(inputHeaders map[string]string) map[string]string 
 	return headers
 }
 
-
-//todo just make contentType a setting
+// todo just make contentType a setting
 func getContentType(replyData interface{}) string {
 
 	contentType := "application/json; charset=UTF-8"
