@@ -111,7 +111,6 @@ func (a *Activity) Metadata() *activity.Metadata {
 
 // Eval implements api.Activity.Eval - Invokes a REST Operation
 func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
-	logger.Debug("小黑修改过")
 
 	input := &Input{}
 	err = ctx.GetInputObject(input)
@@ -147,6 +146,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		logger.Debugf("REST Call: [%s] %s", a.settings.Method, uri)
 	}
 
+	logger.Debug("小黑修改过")
 	var reqBody io.Reader
 
 	contentType := "application/json; charset=UTF-8"
