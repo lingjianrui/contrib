@@ -91,6 +91,7 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 
 	client.Transport = httpTransportSettings
 	act.client = client
+	logger.Debug("小黑修改过")
 
 	return act, nil
 }
@@ -145,8 +146,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	if logger.DebugEnabled() {
 		logger.Debugf("REST Call: [%s] %s", a.settings.Method, uri)
 	}
+	logger.Debug("小黑修改过2")
 
-	logger.Debug("小黑修改过")
 	var reqBody io.Reader
 
 	contentType := "application/json; charset=UTF-8"
@@ -267,6 +268,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 // Utils
 
 func (a *Activity) getHeaders(inputHeaders map[string]string) map[string]string {
+	logger.Debug("小黑修改过3")
 
 	if len(inputHeaders) == 0 {
 		return a.settings.Headers
