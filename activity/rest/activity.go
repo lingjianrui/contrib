@@ -229,6 +229,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		logger.Trace("Empty response")
 		logger.Trace("Empty response")
 		logger.Trace("Empty response")
+		logger.Trace("Empty response")
 		return true, nil
 	}
 
