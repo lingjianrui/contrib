@@ -181,9 +181,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				return false, err
 
 			}
-			if &body != nil {
-				req.Header.Set("Content-Type", contentType)
-			}
+			req.Header.Set("Content-Type", contentType)
 		}
 		if contentType != "multipart/form-data" && input.Content != nil {
 			if str, ok := input.Content.(string); ok {
