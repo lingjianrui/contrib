@@ -268,7 +268,6 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 // Utils
 
 func (a *Activity) getHeaders(inputHeaders map[string]string) map[string]string {
-	logger.Debug("小黑修改过3")
 
 	if len(inputHeaders) == 0 {
 		return a.settings.Headers
