@@ -169,7 +169,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			}
 			contentType = writer.FormDataContentType()
 			logger.Debug("contentType:" + contentType)
-			reqBody = io.Reader(body)
+			reqBody = io.Reader(&body)
 			writer.Close()
 		}
 		if input.Content != nil {
