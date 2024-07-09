@@ -153,7 +153,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	contentType := "application/json; charset=UTF-8"
 	method := a.settings.Method
 	headers := a.getHeaders(input.Headers)
-
+	logger.Debug(headers)
 	if method == methodPOST || method == methodPUT || method == methodPATCH {
 
 		//contentType = getContentType(input.Content)
