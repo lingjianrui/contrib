@@ -3,9 +3,6 @@ package rest
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/project-flogo/core/activity"
-	"github.com/project-flogo/core/data/metadata"
-	"github.com/project-flogo/core/support/ssl"
 	"io"
 	"io/ioutil"
 	"mime/multipart"
@@ -13,6 +10,10 @@ import (
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/data/metadata"
+	"github.com/project-flogo/core/support/ssl"
 )
 
 func init() {
@@ -150,6 +151,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	var reqBody io.Reader
 	var body bytes.Buffer
+	var req *http.Request
 	contentType := "application/json; charset=UTF-8"
 	method := a.settings.Method
 	headers := a.getHeaders(input.Headers)
@@ -162,6 +164,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			logger.Debug("进入逻辑。。。")
 			logger.Debug("内容:" + input.Content.(string))
 			writer := multipart.NewWriter(&body)
+			defer writer.Close()
 			params := strings.Split(input.Content.(string), "&")
 			for _, param := range params {
 				parts := strings.SplitN(param, "=", 2)
@@ -173,8 +176,14 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			}
 			contentType = writer.FormDataContentType()
 			logger.Debug("contentType:" + contentType)
-			reqBody = io.Reader(&body)
-			writer.Close()
+			req, err = http.NewRequest(method, uri, &body)
+			if err != nil {
+				return false, err
+
+			}
+			if &body != nil {
+				req.Header.Set("Content-Type", contentType)
+			}
 		}
 		if contentType != "multipart/form-data" && input.Content != nil {
 			if str, ok := input.Content.(string); ok {
@@ -183,18 +192,18 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				b, _ := json.Marshal(input.Content) //todo handle error
 				reqBody = bytes.NewBuffer([]byte(b))
 			}
+			req, err = http.NewRequest(method, uri, reqBody)
+			if err != nil {
+				return false, err
+
+			}
+			if reqBody != nil {
+				req.Header.Set("Content-Type", contentType)
+			}
+
 		}
 	} else {
 		reqBody = nil
-	}
-
-	req, err := http.NewRequest(method, uri, reqBody)
-	if err != nil {
-		return false, err
-	}
-
-	if reqBody != nil {
-		req.Header.Set("Content-Type", contentType)
 	}
 
 	// Set headers
@@ -206,7 +215,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			if logger.TraceEnabled() {
 				logger.Debugf("%s: %s", key, value)
 			}
-			req.Header.Set(key, value)
+			if key != "Content-Type" {
+				req.Header.Set(key, value)
+			}
 		}
 	}
 
