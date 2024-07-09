@@ -165,6 +165,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			params := strings.Split(input.Content.(string), "&")
 			for _, param := range params {
 				parts := strings.SplitN(param, "=", 2)
+				logger.Debug(parts)
+
 				if len(parts) == 2 {
 					writer.WriteField(parts[0], parts[1])
 				}
