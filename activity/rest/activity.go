@@ -172,7 +172,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			reqBody = io.Reader(&body)
 			writer.Close()
 		}
-		if input.Content != nil {
+		if contentType != "multipart/form-data" && input.Content != nil {
 			if str, ok := input.Content.(string); ok {
 				reqBody = bytes.NewBuffer([]byte(str))
 			} else {
