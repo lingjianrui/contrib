@@ -215,6 +215,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	if resp == nil {
 		logger.Trace("Empty response")
+		logger.Trace("Empty response")
 		return true, nil
 	}
 
