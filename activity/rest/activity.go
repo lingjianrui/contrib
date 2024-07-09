@@ -189,7 +189,6 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				logger.Debug(parts)
 
 				if len(parts) == 2 {
-					writer.CreateFormField(parts[0])
 					writer.WriteField(parts[0], parts[1])
 				}
 			}
