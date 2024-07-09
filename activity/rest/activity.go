@@ -152,10 +152,12 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	var body bytes.Buffer
 	contentType := "application/json; charset=UTF-8"
 	method := a.settings.Method
+	headers := a.getHeaders(input.Headers)
 
 	if method == methodPOST || method == methodPUT || method == methodPATCH {
 
-		contentType = getContentType(input.Content)
+		//contentType = getContentType(input.Content)
+		contentType = headers["Content-Type"]
 		if contentType == "multipart/form-data" && input.Content != nil {
 			logger.Debug("进入逻辑。。。")
 			logger.Debug("内容:" + input.Content.(string))
@@ -192,8 +194,6 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	if reqBody != nil {
 		req.Header.Set("Content-Type", contentType)
 	}
-
-	headers := a.getHeaders(input.Headers)
 
 	// Set headers
 	if len(headers) > 0 {
