@@ -149,14 +149,26 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	logger.Debug("小黑修改过2")
 
 	var reqBody io.Reader
-
+	var body bytes.Buffer
 	contentType := "application/json; charset=UTF-8"
 	method := a.settings.Method
 
 	if method == methodPOST || method == methodPUT || method == methodPATCH {
 
 		contentType = getContentType(input.Content)
-
+		if contentType == "multipart/form-data" && input.Content != nil {
+			writer := multipart.NewWriter(&body)
+			params := strings.Split(input.Content.(string), "&")
+			for _, param := range params {
+				parts := strings.SplitN(param, "=", 2)
+				if len(parts) == 2 {
+					writer.WriteField(parts[0], parts[1])
+				}
+			}
+			contentType = writer.FormDataContentType()
+			reqBody = io.Reader(body)
+			writer.Close()
+		}
 		if input.Content != nil {
 			if str, ok := input.Content.(string); ok {
 				reqBody = bytes.NewBuffer([]byte(str))
