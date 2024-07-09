@@ -160,6 +160,23 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 		//contentType = getContentType(input.Content)
 		contentType = headers["Content-Type"]
+		if contentType != "multipart/form-data" && input.Content != nil {
+			if str, ok := input.Content.(string); ok {
+				reqBody = bytes.NewBuffer([]byte(str))
+			} else {
+				b, _ := json.Marshal(input.Content) //todo handle error
+				reqBody = bytes.NewBuffer([]byte(b))
+			}
+			req, err = http.NewRequest(method, uri, reqBody)
+			if err != nil {
+				return false, err
+
+			}
+			if reqBody != nil {
+				req.Header.Set("Content-Type", contentType)
+			}
+
+		}
 		if contentType == "multipart/form-data" && input.Content != nil {
 			logger.Debug("进入逻辑。。。")
 			logger.Debug("内容:" + input.Content.(string))
@@ -184,23 +201,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			}
 			req.Header.Set("Content-Type", contentType)
 		}
-		if contentType != "multipart/form-data" && input.Content != nil {
-			if str, ok := input.Content.(string); ok {
-				reqBody = bytes.NewBuffer([]byte(str))
-			} else {
-				b, _ := json.Marshal(input.Content) //todo handle error
-				reqBody = bytes.NewBuffer([]byte(b))
-			}
-			req, err = http.NewRequest(method, uri, reqBody)
-			if err != nil {
-				return false, err
 
-			}
-			if reqBody != nil {
-				req.Header.Set("Content-Type", contentType)
-			}
-
-		}
 	} else {
 		reqBody = nil
 	}
