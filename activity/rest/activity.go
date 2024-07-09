@@ -181,8 +181,6 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			logger.Debug("进入逻辑。。。")
 			logger.Debug("内容:" + input.Content.(string))
 			writer := multipart.NewWriter(&body)
-			defer writer.Close()
-
 			params := strings.Split(input.Content.(string), "&")
 			for _, param := range params {
 				parts := strings.SplitN(param, "=", 2)
@@ -192,6 +190,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 					writer.WriteField(parts[0], parts[1])
 				}
 			}
+			writer.Close()
 			contentType = writer.FormDataContentType()
 			logger.Debug("contentType:" + contentType)
 			req, err = http.NewRequest(method, uri, &body)
