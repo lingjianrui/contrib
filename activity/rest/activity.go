@@ -187,7 +187,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		}
 		for key, value := range headers {
 			if logger.TraceEnabled() {
-				logger.Tracef("%s: %s", key, value)
+				logger.Debugf("%s: %s", key, value)
 			}
 			req.Header.Set(key, value)
 		}
