@@ -3,16 +3,16 @@ package rest
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/data/metadata"
+	"github.com/project-flogo/core/support/ssl"
 	"io"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
-
-	"github.com/project-flogo/core/activity"
-	"github.com/project-flogo/core/data/metadata"
-	"github.com/project-flogo/core/support/ssl"
 )
 
 func init() {
@@ -157,6 +157,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 		contentType = getContentType(input.Content)
 		if contentType == "multipart/form-data" && input.Content != nil {
+			logger.Debug("进入逻辑。。。")
+			logger.Debug("内容:" + input.Content.(string))
 			writer := multipart.NewWriter(&body)
 			params := strings.Split(input.Content.(string), "&")
 			for _, param := range params {
@@ -166,6 +168,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				}
 			}
 			contentType = writer.FormDataContentType()
+			logger.Debug("contentType:" + contentType)
 			reqBody = io.Reader(body)
 			writer.Close()
 		}
