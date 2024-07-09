@@ -239,6 +239,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	if logger.DebugEnabled() {
 		logger.Debug("Response status:", resp.Status)
+		logger.Debug("Response status:", resp.Status)
+		logger.Debug("Response status:", resp.Status)
 	}
 
 	respHeaders := make(map[string]string, len(resp.Header))
