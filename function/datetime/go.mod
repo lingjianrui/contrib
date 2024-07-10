@@ -1,4 +1,4 @@
-module github.com/project-flogo/contrib/function/datetime
+module github.com/lingjianrui/contrib/function/datetime
 
 require (
 	github.com/project-flogo/core v1.0.0
