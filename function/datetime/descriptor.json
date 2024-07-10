@@ -296,6 +296,16 @@
       }
     },
     {
+      "name": "timestamp",
+      "description": "Returns the current time with UTC timezone.",
+      "example": "datetime.timestamp() => 1627670400000",
+      "args": [],
+      "return": {
+        "type": "int"
+      }
+    },
+
+    {
       "name": "parse",
       "description": "Parse the given datetime to the DateTime with time zone, default base on UTC and timezone follow the IANA Time Zone ",
       "example": "datetime.parse(\"2020-03-19T15:02:03+06:00\", \"America/Los_Angeles\") => 2020-03-19T02:02:03-07:00",
