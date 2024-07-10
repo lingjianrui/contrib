@@ -32,5 +32,5 @@ func (s *Timestamp) Eval(params ...interface{}) (interface{}, error) {
 	n := time.Now()
 	unixTimestamp := n.Unix()
 	millisTimestamp := unixTimestamp * 1000
-	return millisTimestamp
+	return millisTimestamp, nil
 }
